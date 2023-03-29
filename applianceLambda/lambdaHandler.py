@@ -18,27 +18,21 @@ class LambdaHandler:
             str: The intent name.
 
         """
-        return self.event['sessionState']['intent']['name']
-
-    def getSlotValue(self, slotName) -> str:
-        """
-        Gets the value of a slot from the request.
-
-        Args:
-            slotName (str): The name of the slot.
-
-        Returns:
-            str: The value of the slot.
-
-        """
-        return self.event['sessionState']['intent']['slots'][slotName]['value']
+        return self.event['currentIntent']['name']
 
     # Dispatches the request to the appropriate handler for the intent.
 
-    def dispatch():
+    def dispatch(self):
         """
         Calls the appropriate intent handler based on the incoming request.
         """
+        intent_name = self.getIntentName()
+
+        if intent_name == 'BookAppointment':
+            bookAppointment = BookAppointment(self.event)
+            return bookAppointment.makeAppointment()
+        # elif (Add more intents here):
+        raise Exception('Intent with name ' + intent_name + ' not supported')
 
 
 def handler(event, context):
